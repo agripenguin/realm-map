@@ -28,8 +28,8 @@ def detect_map(fp):
     # 地図枠の色範囲
     #（BGRで[148, 188,211]と[107, 133, 151]）
     # print(cv2.cvtColor(np.uint8([[[148, 188,211]]]), cv2.COLOR_BGR2HSV))
-    lower = np.array([18,70,150])
-    upper = np.array([19,80,220])
+    lower = np.array([18,70,125])
+    upper = np.array([19,85,220])
 
     # Threshold the HSV image to get only colors
     mask = cv2.inRange(hsv, lower, upper)
@@ -42,6 +42,10 @@ def detect_map(fp):
     flame_can = []
     for i in range(0, len(contours)):
         if len(contours[i]) > 0:
+            #remove small objects
+            if cv2.contourArea(contours[i]) < 10000 or cv2.contourArea(contours[i]) > 1500000:
+                continue
+
             rect = contours[i]
             flame_can.append(cv2.boundingRect(rect))
 
