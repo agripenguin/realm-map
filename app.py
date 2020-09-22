@@ -1,5 +1,5 @@
 from flask import Flask, request, redirect
-from datetime import datetime
+from datetime import date
 import os
 import magic
 import detect
@@ -19,7 +19,10 @@ def index_page():
         <form action="/upload"
             method="POST"
             enctype="multipart/form-data">
-            <input type="file" name="upfile">
+            <input type="file" name="upfile"></br>
+            拡張段階：<input type="number" min="0" max="4" name="zoom_level" value="0"></br>
+            x：       <input type="number" name="x"></br>
+            y：       <input type="number" name="y"></br>
             <input type="submit" value="アップロード">
         </form>
         </body></html>
@@ -27,11 +30,16 @@ def index_page():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    if not ('upfile' in request.files):
+    if not ('upfile' in request.files) or not (('zoom_level' or 'x' or 'y') in request.form):
         return redirect('/')
+
     temp_file = request.files['upfile']
-    if temp_file.filename == '':
+    temp_zoom = request.form['zoom_level']
+    temp_x = request.form['x']
+    temp_y = request.form['y']
+    if temp_file.filename == '' or temp_zoom == '' or temp_x == '' or temp_y == '':
         return redirect('/')
+
     fp = temp_file.stream
     mime = magic.from_buffer(fp.read(1024), mime=True) 
     fp.seek(0)
@@ -40,18 +48,27 @@ def upload():
     if mime != 'image/png' and mime != 'image/jpeg':
     #if not is_jpegfile(temp_file.stream):
         return '<h1>画像ファイル以外アップできません</h1>'
-    time_s = datetime.now().strftime('%Y%m%d%H%M%S')
-    fname = time_s + '.' + mime.split('/')[1]
-    detect.detect_map(fp).save(IMAGES_DIR+'/'+fname)
-    #temp_file.save(IMAGES_DIR+'/'+fname)
-    return redirect('/photo/'+fname)
+    
+    dt_now = str(date.today())
+    save_dir = IMAGES_DIR + '/' + dt_now
+    fname = temp_zoom + ',' + temp_x + ',' + temp_y + '.' + mime.split('/')[1]
 
-@app.route('/photo/<fname>')
-def photo_page(fname):
-    if fname is None: return redirect('/')
-    image_path = IMAGES_DIR + '/' + fname
-    image_url = IMAGES_URL + '/' + fname
-    if not os. path.exists(image_path):
+    try:
+        os.makedirs(save_dir, exist_ok=True)
+    except FileExistsError:
+        pass
+
+    detect.detect_map(fp).save(save_dir +'/'+fname)
+    #temp_file.save(IMAGES_DIR+'/'+fname)
+    return redirect('/photo/'+dt_now+'_'+fname)
+
+@app.route('/photo/<dir_fname>')
+def photo_page(dir_fname):
+    if dir_fname is None: return redirect('/')
+    dt, fname = dir_fname.split('_')
+    image_path = IMAGES_DIR + '/' + dt + '/' + fname
+    image_url = IMAGES_URL + '/' + dt + '/' + fname
+    if not os.path.exists(image_path):
         return '<h1>画像がありません</h1>'
     return """
         <h1>画像がアップロードされました</h1>
