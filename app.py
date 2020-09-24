@@ -1,4 +1,5 @@
 from flask import Flask, request, redirect
+from flask import send_file
 from datetime import date
 import os
 import magic
@@ -75,7 +76,19 @@ def photo_page(dir_fname):
         <p>URL: {0}<br>
         file: {1}</p>
         <img src="{0}" width="400">
-    """.format(image_url, image_path)
+        <p>
+        <a href="/download/{2}">ダウンロード</a>
+        <a href="/">他のファイルをアップロード</a>
+        </p>
+    """.format(image_url, image_path, dir_fname)
+
+@app.route('/download/<dir_fname>')
+def download(dir_fname):
+    if dir_fname is None: return redirect('/')
+    dt, fname = dir_fname.split('_')
+    download_file = IMAGES_DIR + '/' + dt + '/' + fname
+    return send_file(download_file, as_attachment =True, attachment_filename=fname)
+    
 
 def is_jpegfile(fp):
     byte = fp.read(2)

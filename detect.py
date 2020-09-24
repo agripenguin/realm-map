@@ -28,8 +28,8 @@ def detect_map(fp):
     # 地図枠の色範囲
     #（BGRで[148, 188,211]と[107, 133, 151]）
     # print(cv2.cvtColor(np.uint8([[[148, 188,211]]]), cv2.COLOR_BGR2HSV))
-    lower = np.array([18,70,125])
-    upper = np.array([19,85,220])
+    lower = np.array([17,70,125])
+    upper = np.array([19,90,220])
 
     # Threshold the HSV image to get only colors
     mask = cv2.inRange(hsv, lower, upper)
