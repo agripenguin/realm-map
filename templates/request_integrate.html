@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html><body><h1>統合地図をダウンロード</h1>
+<form action="/integrate_download"
+    method="POST"
+    enctype="multipart/form-data">
+
+    <p>
+    <select name="area">
+    <option value="a"　selected>全体</option>
+    <option value="ic">工業都市</option>
+    <option value="cc">臨海都市</option>
+    </select>
+    </p>
+<!--
+    拡張段階：<input type="number" min="0" max="4" name="zoom_level" value="0"></br>
+    x：       <input type="number" name="x"></br>
+    y：       <input type="number" name="y"></br>-->
+    <input type="submit" value="統合地図をダウンロード">
+    <p>
+    <a href="/multi_upload">まとめてアップロード</a>
+    </p>
+</form>
+</body></html>
