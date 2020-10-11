@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html><body><h1>アップロード</h1>
+<form action="/upload_go"
+    method="POST"
+    enctype="multipart/form-data">
+    <input type="file" name="upfile"></br>
+    拡張段階：<input type="number" min="0" max="4" name="zoom_level" value="0"></br>
+    x：       <input type="number" name="x"></br>
+    y：       <input type="number" name="y"></br>
+    <input type="submit" value="アップロード">
+    <p>
+    <a href="/multi_upload">まとめてアップロード</a>
+    </p>
+</form>
+</body></html>

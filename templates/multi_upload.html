@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{url_for('static', filename = 'css/area_style.css')}}">
+</head>    
+<body>
+    <script src="{{url_for('static', filename = 'js/drag_drop_area.js')}}"></script>
+<h1>まとめてアップロード</h1>
+<p>
+ナンバリングをファイル名から取得し、まとめてアップロードできます。</br>
+ファイル名は</br>
+0,0,0.png</br>
+のように[拡張段階],[x],[y].拡張子としてください</br>
+</p>
+<form action="/multi_upload_go"
+    method="POST"
+    enctype="multipart/form-data">
+    <!--
+    <div id="drag-drop-area">
+        <div class="drag-drop-inside">
+            <p class="drag-drop-info">ここにファイルをドロップ</p>
+            <p>または</p>
+            <p class="drag-drop-buttons">
+                <input id="fileInput" type="file" value="ファイルを選択" name="upload_files" multiple>
+            </p>
+        </div>
+    </div>
+    -->
+    <input id="fileInput" type="file" value="ファイルを選択" name="upload_files" multiple>
+    <input type="submit" value="アップロード">
+</form>
+<p><a href="/upload">一枚ずつアップロード</a></p>
+</body></html>
