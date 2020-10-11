@@ -85,7 +85,4 @@ def integrate_go(area):
         map = list(map(int, area.split()))
         name = "new"
     #integrate(mkimlist2d()).save('./new3.png')
-    fo = io.BytesIO()
-    integrate(mkimlist2d(*map)).save(fo, format='png')
-    fo.seek(0)
-    return fo, name
+    return integrate(mkimlist2d(*map)), name

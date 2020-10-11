@@ -1,8 +1,8 @@
 from flask import Flask, request, redirect, render_template, session
 from flask import send_file, Markup
 from datetime import date
-import io
 import os
+import shutil
 import re
 import magic
 import detect
@@ -109,11 +109,15 @@ def request_integrate():
 
 @app.route('/integrate_download', methods=['POST'])
 def integrate_download():
+    shutil.rmtree('tmp')
+    os.mkdir('tmp')
     area = request.form['area']
     today = date.today()
     fo, name = integrate.integrate_go(area)
     fname = '{0}_{1}.png'.format(today, name)
-    return send_file(fo, mimetype='image/png', as_attachment =True, attachment_filename=fname)
+    dirname = './tmp/' + fname
+    fo.save(dirname)
+    return send_file(dirname, mimetype='image/png', as_attachment =True, attachment_filename=fname)
 
 def check_mime(fp):
     #from_buffer()の引数はファイルオブジェクトをreadしたもの。
