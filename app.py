@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect, render_template, session
 from flask import send_file, Markup
 from datetime import date
+import io
 import os
 import re
 import magic
@@ -109,9 +110,10 @@ def request_integrate():
 @app.route('/integrate_download', methods=['POST'])
 def integrate_download():
     area = request.form['area']
-    dirname = integrate.integrate_go(area)
-    return send_file(dirname, as_attachment =True)
-    #os.remove(dirname)
+    today = date.today()
+    fo, name = integrate.integrate_go(area)
+    fname = '{0}_{1}.png'.format(today, name)
+    return send_file(fo, mimetype='image/png', as_attachment =True, attachment_filename=fname)
 
 def check_mime(fp):
     #from_buffer()の引数はファイルオブジェクトをreadしたもの。

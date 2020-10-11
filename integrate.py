@@ -1,6 +1,7 @@
 from PIL import Image, ImageFilter
 import os
 import datetime
+import io
 
 length = 128
 
@@ -52,8 +53,6 @@ br = [-7,7,-4,10]
 all = [-10,-10,16,14]
 
 def integrate_go(area):
-    today = datetime.date.today()
-    dirname = 'tmp/{0}_{1}.png'.format(today,area)
     #以下実行文
     if area == "ic" or area == "工業都市":
         map = ic
@@ -73,8 +72,8 @@ def integrate_go(area):
     elif area == "ph" or area == "トウヒが丘":
         map = ph
         name = 'Pine_Hill'
-    elif area == "si" or area == "白根":
-        map = si
+    elif area == "sn" or area == "白根":
+        map = sn
         name = 'Shirane'
     elif area == 'br' or area == "伯林":
         map = br
@@ -86,5 +85,7 @@ def integrate_go(area):
         map = list(map(int, area.split()))
         name = "new"
     #integrate(mkimlist2d()).save('./new3.png')
-    integrate(mkimlist2d(*map)).save(dirname)
-    return dirname
+    fo = io.BytesIO()
+    integrate(mkimlist2d(*map)).save(fo, format='png')
+    fo.seek(0)
+    return fo, name
