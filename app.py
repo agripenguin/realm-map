@@ -132,7 +132,7 @@ def is_image(fp):
 
 #画像ファイルかどうかチェックした上で保存する
 def check_save_file(fp, fname, dt_now):
-    if re.fullmatch(r'\d,\d,\d.[a-z]+', fname) == None:
+    if re.fullmatch(r'[0-4],-*\d+,-*\d+.[a-z]+', fname) == None:
         return -2
     if not is_image(fp):
         return -1
